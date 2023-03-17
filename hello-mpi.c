@@ -16,7 +16,7 @@ int main(int argc, char **argv) {
 	printf("%i: Ready x = %f\n", miproc, x);
 	MPI_Barrier (MPI_COMM_WORLD);
 	y = x*x
-	printf("%i:%f^2 = %f\n", numproc, x, y);
+	printf("%i:%f^2 = %f\n", miproc, x, y);
 
 	//printf("%i: Finished!\n", miproc);
 
