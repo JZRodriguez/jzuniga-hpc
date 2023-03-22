@@ -9,6 +9,7 @@ int main(int argc, char **argv) {
 	float y;
 	float data;
 	MPI_Status status;
+	float sum = 0.0;
 	
 	MPI_Init (&argc, &argv); /* Inicializar MPI */
 
@@ -21,8 +22,9 @@ int main(int argc, char **argv) {
 	//printf("%i:%f^2 = %f\n", miproc, x, y);
 
 	if (miproc == 0) {
-	  data = 1;
+	  sum = 1;
 	  for (int i = 1; i < numproc; i++) {
+	    data = i+1
 	    printf("Sending: %i -> %i, %f:", 0, i, data);
 	    MPI_Send(&data, sizeof(data), MPI_FLOAT, i, 98, MPI_COMM_WORLD);
 	    printf("OK.\n");
@@ -31,7 +33,23 @@ int main(int argc, char **argv) {
 	  //printf("Receiving%i -> %i:", 0, miproc);
 	  MPI_Recv(&data, sizeof(data), MPI_FLOAT, 0, 98, MPI_COMM_WORLD, &status);
 	  //printf("%f: OK.\n", data);
+	  data = data * data;
 	}
+
+	MPI_Barrier (MPI_COMM_WORLD);
+
+	if (miproc == 0) {
+	  for (int i = 1; i < numproc; i++) {
+	    MPI_Recv(&data, sizeof(data), MPI_FLOAT, i, 98, MPI_COMM_WORLD, &status);
+	    sum += data;
+	  }
+	  printf("Suma = %f\n", sum);
+	} else {
+	  MPI_Send(&data, sizeof(data), MPI_FLOAT, 0, 98, MPI_COMM_WORLD);
+	}
+	  
+
+	
 	//printf("%i: Finished!\n", miproc);
 
 	MPI_Finalize ();
