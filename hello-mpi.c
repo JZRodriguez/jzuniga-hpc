@@ -10,6 +10,8 @@ int main(int argc, char **argv) {
 	float data;
 	MPI_Status status;
 	float sum = 0.0;
+	int j;
+	// int k;
 	
 	MPI_Init (&argc, &argv); /* Inicializar MPI */
 
@@ -29,25 +31,38 @@ int main(int argc, char **argv) {
 	    MPI_Send(&data, sizeof(data), MPI_FLOAT, i, 98, MPI_COMM_WORLD);
 	    printf("OK.\n");
 	  }
+	MPI_Barrier (MPI_COMM_WORLD);
 	} else { //slaves
 	  //printf("Receiving%i -> %i:", 0, miproc);
 	  MPI_Recv(&data, sizeof(data), MPI_FLOAT, 0, 98, MPI_COMM_WORLD, &status);
 	  //printf("%f: OK.\n", data);
 	  data = data * data;
+	  //MPI_Barrier (MPI_COMM_WORLD);
 	}
 
-	MPI_Barrier (MPI_COMM_WORLD);
+	
 
+	printf("Computing......\n");
+	
 	if (miproc == 0) {
-	  for (int i = 1; i < numproc; i++) {
-	    MPI_Recv(&data, sizeof(data), MPI_FLOAT, i, 98, MPI_COMM_WORLD, &status);
+	  int k;
+	  printf("Master %i\n", numproc);
+	  k = 0;
+	  for (j = 1; j < numproc; j++) {
+	    k = k + 1;
+	    printf("RCV %i -> %i\n", 0, k);
+	    MPI_Recv(&data, sizeof(data), MPI_FLOAT, k, 99, MPI_COMM_WORLD, &status);
 	    sum += data;
 	  }
+	  
 	  printf("Suma = %f\n", sum);
+	  MPI_Barrier (MPI_COMM_WORLD);
 	} else {
-	  MPI_Send(&data, sizeof(data), MPI_FLOAT, 0, 98, MPI_COMM_WORLD);
+	  printf("SND %i -> %i\n", miproc, 0);
+	  MPI_Send(&data, sizeof(data), MPI_FLOAT, 0, 99, MPI_COMM_WORLD);
+	  //MPI_Barrier (MPI_COMM_WORLD);
 	}
-
+	
 	MPI_Barrier (MPI_COMM_WORLD);
 
 	
