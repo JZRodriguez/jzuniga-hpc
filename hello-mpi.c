@@ -50,7 +50,7 @@ int main(int argc, char **argv) {
 	  k = 0;
 	  for (j = 1; j < numproc; j++) {
 	    k = k + 1;
-	    printf("RCV %i -> %i\n", 0, k);
+	    printf("RCV %i -> %i\n", k, 0);
 	    MPI_Recv(&data, sizeof(data), MPI_FLOAT, k, 99, MPI_COMM_WORLD, &status);
 	    sum += data;
 	  }
