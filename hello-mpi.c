@@ -47,7 +47,8 @@ int main(int argc, char **argv) {
 	} else {
 	  MPI_Send(&data, sizeof(data), MPI_FLOAT, 0, 98, MPI_COMM_WORLD);
 	}
-	  
+
+	MPI_Barrier (MPI_COMM_WORLD);
 
 	
 	//printf("%i: Finished!\n", miproc);
