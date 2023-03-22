@@ -24,7 +24,7 @@ int main(int argc, char **argv) {
 	if (miproc == 0) {
 	  sum = 1;
 	  for (int i = 1; i < numproc; i++) {
-	    data = i+1
+	    data = i + 1;
 	    printf("Sending: %i -> %i, %f:", 0, i, data);
 	    MPI_Send(&data, sizeof(data), MPI_FLOAT, i, 98, MPI_COMM_WORLD);
 	    printf("OK.\n");
