@@ -29,46 +29,48 @@ int main(int argc, char **argv){
     sum = 1;
     for (int i=1;i<numproc;i++){
       data = i+1;
-      printf("Sending:%i->%i,%f:",0,i,data);
+      //printf("Sending:%i->%i,%f:",0,i,data);
       MPI_Send(&data, sizeof(data), MPI_CHAR, i, 98, MPI_COMM_WORLD);
-      printf("ok\n");
+      //printf("ok\n");
     }
   MPI_Barrier (MPI_COMM_WORLD);
   }else{//slaves
-        printf("Receiving:%i->%i,:",0,miproc);
+        //printf("Receiving:%i->%i,:",0,miproc);
         MPI_Recv(&data, sizeof(data), MPI_CHAR, 0, 98, MPI_COMM_WORLD, &status);
-        printf("%f:ok\n",data);
+        //printf("%f:ok\n",data);
         data = data*data;
-        MPI_Barrier (MPI_COMM_WORLD); 
+        //MPI_Barrier (MPI_COMM_WORLD); 
 
   }
 
+  MPI_Barrier (MPI_COMM_WORLD);
 
-printf("Computing...\n");
+
+  //printf("Computing...\n");
 
 
 if (miproc == 0){
   int k;
-  printf("Master %i\n",numproc);
+  //printf("Master %i\n",numproc);
   //k = 0;
   for(k=1;k<4;k++){
     //k = k+1;
-    printf("RCV %i->%i\n",k,0);  
+    //printf("RCV %i->%i\n",k,0);  
     MPI_Recv(&data, sizeof(data), MPI_CHAR, k, 99, MPI_COMM_WORLD, &status);
     sum += data;
   }
 
-  printf("Suma=%f\n",sum);
+  //printf("Suma=%f\n",sum);
   MPI_Barrier(MPI_COMM_WORLD); 
 }else{
-  printf("SND %i->%i\n",miproc,0);
+  //printf("SND %i->%i\n",miproc,0);
   MPI_Send(&data, sizeof(data), MPI_CHAR, 0, 99, MPI_COMM_WORLD);
-   MPI_Barrier(MPI_COMM_WORLD); 
+  //MPI_Barrier(MPI_COMM_WORLD); 
 
 
 }
 
- //MPI_Barrier (MPI_COMM_WORLD); 
+ MPI_Barrier (MPI_COMM_WORLD); 
   //printf("%i: Termine!\n",miproc);
 
   MPI_Finalize ();
