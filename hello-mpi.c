@@ -30,13 +30,13 @@ int main(int argc, char **argv){
     for (int i=1;i<numproc;i++){
       data = i+1;
       printf("Sending:%i->%i,%f:",0,i,data);
-      MPI_Send(&data, sizeof(data), MPI_FLOAT, i, 98, MPI_COMM_WORLD);
+      MPI_Send(&data, sizeof(data), MPI_CHAR, i, 98, MPI_COMM_WORLD);
       printf("ok\n");
     }
   MPI_Barrier (MPI_COMM_WORLD);
   }else{//slaves
         printf("Receiving:%i->%i,:",0,miproc);
-        MPI_Recv(&data, sizeof(data), MPI_FLOAT, 0, 98, MPI_COMM_WORLD, &status);
+        MPI_Recv(&data, sizeof(data), MPI_CHAR, 0, 98, MPI_COMM_WORLD, &status);
         printf("%f:ok\n",data);
         data = data*data;
         MPI_Barrier (MPI_COMM_WORLD); 
